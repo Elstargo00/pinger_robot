@@ -4,7 +4,7 @@ import os
 import supervision as sv
 from PingerVision.utils import get_current_time
 
-CAPTURE_DIRECTORY = "/home/elstargo00/Projects/pinger_robot/captures"
+# CAPTURE_DIRECTORY = "/home/elstargo00/Projects/pinger_robot/captures"
 
 
 
@@ -62,7 +62,7 @@ class CameraProcessor:
 
         
 
-    def continuous_capture(self, save=False):
+    def continuous_capture(self):
         """
         - Continuous capturing & save to disk
         - Continuous capturing & save to memory 
@@ -91,17 +91,17 @@ class CameraProcessor:
                             self.mem_pool.append(frame)
 
 
-                    k = cv2.waitKey(1)
-                    if k == ord('c'):
-                        if save:
-                            frame_name = f"frame_{get_current_time()}.png"
-                            frame_path = os.path.join(CAPTURE_DIRECTORY, frame_name)
-                            cv2.imwrite(frame_path, frame) # write to disk
-                            print(f"Captured {frame_name}")
-                        self.mem_pool.append(frame) # write to memory
+                    # k = cv2.waitKey(1)
+                    # if k == ord('c'):
+                    #     if save:
+                    #         frame_name = f"frame_{get_current_time()}.png"
+                    #         frame_path = os.path.join(CAPTURE_DIRECTORY, frame_name)
+                    #         cv2.imwrite(frame_path, frame) # write to disk
+                    #         print(f"Captured {frame_name}")
+                    #     self.mem_pool.append(frame) # write to memory
                         
-                    elif k == 27:  # Press 'Esc' to exit
-                        break
+                    # elif k == 27:  # Press 'Esc' to exit
+                    #     break
 
                     self.frame_count += 1
 

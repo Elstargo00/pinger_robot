@@ -24,16 +24,18 @@ def camera_worker(device_id, config_path):
         print(f"Error in camera_worker: {e}")
 
     else: 
-        return processor.continuous_capture(False)
+        return processor.continuous_capture()
 
 def process_imgs(img_list, model):
-    isProtruded = False
-    results = model(source=img_list, verbose=False)
-    for i, result in enumerate(results):
-        currentProtruded += bool(len([result.names[int(res.boxes.cls)] for res in result]))
-        isProtruded += currentProtruded
+    # isProtruded = False
+    # results = model(source=img_list, verbose=False)
+    # for i, result in enumerate(results):
+    for i, _ in enumerate(len(img_list)):
+        # currentProtruded += bool(len([result.names[int(res.boxes.cls)] for res in result]))
+        # isProtruded += currentProtruded
 
-        if currentProtruded:
+        # if currentProtruded: # use this setting in the interpretation mode 
+        if True: # use this setting in capturing mode
             frame_name = f"frame_{get_current_time()}.png"
             frame_path = os.path.join(CAPTURE_DIRECTORY, frame_name)
             cv2.imwrite(frame_path, img_list[i]) # write to disk
@@ -44,9 +46,10 @@ def process_imgs(img_list, model):
 
 if __name__ == "__main__":
 
-    model = YOLO("./model/best.pt")
-    acc = "cuda" if torch.cuda.is_available() else "cpu"
-    model.to(acc)
+    # model = YOLO("./model/best.pt")
+    model = None
+    # acc = "cuda" if torch.cuda.is_available() else "cpu"
+    # model.to(acc)
 
     multiprocessing.set_start_method("spawn")
 
@@ -66,10 +69,10 @@ if __name__ == "__main__":
         # print(list_batch)
 
     # GPU
-    for somelist in list_batch:
-        print(len(somelist))
+    # for somelist in list_batch:
+        # print(len(somelist))
     img_list = [item for sublist in list_batch for item in sublist]
-    # isProtruded = process_imgs(img_list, model)
+    isProtruded = process_imgs(img_list, model)
 
     # print(f"Protruded Detected!") if isProtruded else print("Pallet is clean")
     # print("End pool")
